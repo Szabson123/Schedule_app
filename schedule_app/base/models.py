@@ -12,13 +12,16 @@ class Invitation_code(models.Model):
     
 
 class Company(models.Model):
-    company = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     
     def generate_invitation_code(self):
         code = uuid.uuid4().hex[:6].upper()
         Invitation_code.objects.create(company=self, code=code)
         return code
+    
+    def __str__(self) -> str:
+         return self.name
         
 
 class Profile(models.Model):
