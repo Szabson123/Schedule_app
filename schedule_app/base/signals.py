@@ -8,14 +8,15 @@ from base.models import Profile, Company
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-
+    user_group, _ = Group.objects.get_or_create(name='User')
+    user_group.user_set.add(instance)
 
 
 @receiver(post_save, sender=Company)
 def create_company_user_profile(sender, instance, created, **kwargs):
     user = instance.owner
     if created:
-        Profile.objects.create(user=user)
+        Profile.objects.get_or_create(user=user)
 
     boss_group, _ = Group.objects.get_or_create(name='Boss')
     boss_group.user_set.add(user)
