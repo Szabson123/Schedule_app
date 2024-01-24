@@ -1,3 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
 
-# Create your views here.
+from base.models import User, Profile, Company, InvitationCode
+from base.forms import UserForm, CompanyForm
+
+
+def user_register(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('login')
+    else:
+        form = UserForm
+    return render(request, 'accounts/register_user.html', {'form': form})
+
+
+def company_register(request):
+    if request.method == 'POST':
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('login')
+    else:
+        form = CompanyForm
+    return render(request, 'accounts/register_company.html', {'form': form})
