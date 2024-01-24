@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 
 
-class Invitation_code(models.Model):
+class InvitationCode(models.Model):
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
     code = models.CharField(max_length=6)
     is_used = models.BooleanField(default=False)
@@ -17,17 +17,17 @@ class Company(models.Model):
     
     def generate_invitation_code(self):
         code = uuid.uuid4().hex[:6].upper()
-        Invitation_code.objects.create(company=self, code=code)
+        InvitationCode.objects.create(company=self, code=code)
         return code
     
     def __str__(self) -> str:
-         return self.name
+        return self.name
         
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    inv_code = models.ForeignKey(Invitation_code, on_delete=models.CASCADE)
+    inv_code = models.ForeignKey(InvitationCode, on_delete=models.CASCADE)
     
     def __str__(self):
-	    return f'{self.user.first_name} {self.user.last_name}'
+        return f'{self.user.first_name} {self.user.last_name}'
 
