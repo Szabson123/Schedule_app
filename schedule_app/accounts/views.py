@@ -9,6 +9,11 @@ def user_register(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
+            inv_code = form.cleaned_data['inv_code']
+            invitation = InvitationCode.objects.get(code=inv_code)
+            invitation.is_used = True
+            invitation.save()
+
             user = form.save()
             login(request, user)
             return redirect('login')
