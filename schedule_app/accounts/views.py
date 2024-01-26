@@ -16,7 +16,7 @@ def user_register(request):
 
             user = form.save()
             login(request, user)
-            return redirect('login')
+            return redirect('account:login')
     else:
         form = UserForm
     return render(request, 'accounts/register_user.html', {'form': form})
@@ -34,7 +34,7 @@ def company_register(request):
             company.owner = user
             company.save()
             
-            custom_inv_code = company_form.cleaned_data('custom_inv_code')
+            custom_inv_code = company_form.cleaned_data['custom_inv_code']
             company.generate_invitation_code(custom_code=custom_inv_code)
             
             login(request, user)
