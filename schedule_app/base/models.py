@@ -7,6 +7,7 @@ from datetime import datetime
 
 class InvitationCode(models.Model):
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     code = models.CharField(max_length=6)
     is_used = models.BooleanField(default=False)
     
@@ -16,7 +17,7 @@ class Company(models.Model):
     name = models.CharField(max_length=255)
     
     def generate_invitation_code(self, custom_code=None):
-        if code:
+        if custom_code:
             code = custom_code
         else:
             code = uuid.uuid4().hex[:6].upper()

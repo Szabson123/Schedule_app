@@ -16,7 +16,7 @@ def user_register(request):
 
             user = form.save()
             login(request, user)
-            return redirect('account:login')
+            return redirect('accounts:login')
     else:
         form = UserForm
     return render(request, 'accounts/register_user.html', {'form': form})
@@ -28,7 +28,7 @@ def company_register(request):
         company_form = CompanyForm(request.POST)
         
         if user_form.is_valid() and company_form.is_valid():
-            user  = user_form.save()
+            user = user_form.save(commit=False)
             
             company = company_form.save(commit=False)
             company.owner = user
@@ -38,7 +38,7 @@ def company_register(request):
             company.generate_invitation_code(custom_code=custom_inv_code)
             
             login(request, user)
-            return redirect('account:login')
+            return redirect('accounts:login')
     else:
         user_form = UserCreationForm()
         company_form = CompanyForm()
