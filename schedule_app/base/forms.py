@@ -4,6 +4,7 @@ from base.models import Profile, User, Company, InvitationCode
 
 
 class UserForm(UserCreationForm):
+    inv_code = forms.CharField(required=True)
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'inv_code', 'password1', 'password2']
@@ -15,10 +16,10 @@ class UserForm(UserCreationForm):
         return inv_code
 
 
-class CompanyForm(UserCreationForm):
+class CompanyForm(forms.ModelForm):
     custom_inv_code = forms.CharField(required=True, label="Kod do przyszłego logowania")
     email = forms.EmailField(required=True)
 
     class Meta:
         model = Company
-        fields = ['username', 'first_name', 'last_name', 'name', 'email', 'password1', 'password2', 'custom_inv_code']
+        fields = ['name', 'email', 'custom_inv_code']

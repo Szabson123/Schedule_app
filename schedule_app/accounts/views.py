@@ -3,7 +3,7 @@ from django.contrib.auth import login
 
 from base.models import User, Profile, Company, InvitationCode
 from base.forms import UserForm, CompanyForm
-
+from django.contrib.auth.forms import UserCreationForm
 
 def user_register(request):
     if request.method == 'POST':
@@ -24,16 +24,25 @@ def user_register(request):
 
 def company_register(request):
     if request.method == 'POST':
-        form = CompanyForm(request.POST)
-        if form.is_valid():
-            company = form.save(commit=False)
-            custom_inv_code = form.cleaned_data('custom_inv_code')
-            company.owner = request.user
+        user_form = UserCreationForm(request.POST)
+        company_form = CompanyForm(request.POST)
+        
+        if user_form.is_valid() and company_form.is_valid():
+            user  = user_form.save()
+            
+            company = company_form.save(commit=False)
+            company.owner = user
             company.save()
+            
+            custom_inv_code = company_form.cleaned_data('custom_inv_code')
             company.generate_invitation_code(custom_code=custom_inv_code)
             
-            login(request, request.user)
-            return redirect('login')
+            login(request, user)
+            return redirect('account:login')
     else:
-        form = CompanyForm
-    return render(request, 'accounts/register_company.html', {'form': form})
+        user_form = UserCreationForm()
+        company_form = CompanyForm()
+    return render(request, 'accounts/register_company.html', {
+    'user_form': user_form,
+    'company_form': company_form
+    })
