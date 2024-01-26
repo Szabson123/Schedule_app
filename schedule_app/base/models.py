@@ -15,8 +15,11 @@ class Company(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     
-    def generate_invitation_code(self):
-        code = uuid.uuid4().hex[:6].upper()
+    def generate_invitation_code(self, custom_code=None):
+        if code:
+            code = custom_code
+        else:
+            code = uuid.uuid4().hex[:6].upper()
         InvitationCode.objects.create(company=self, code=code)
         return code
     

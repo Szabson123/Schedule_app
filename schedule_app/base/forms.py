@@ -16,8 +16,9 @@ class UserForm(UserCreationForm):
 
 
 class CompanyForm(UserCreationForm):
+    custom_inv_code = forms.CharField(required=True, label="Kod do przyszłego logowania")
     email = forms.EmailField(required=True)
 
     class Meta:
         model = Company
-        fields = ['username', 'first_name', 'last_name', 'name', 'email', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'name', 'email', 'password1', 'password2', 'custom_inv_code']

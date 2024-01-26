@@ -26,8 +26,13 @@ def company_register(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
+            company = form.save(commit=False)
+            custom_inv_code = form.cleaned_data('custom_inv_code')
+            company.owner = request.user
+            company.save()
+            company.generate_invitation_code(custom_code=custom_inv_code)
+            
+            login(request, request.user)
             return redirect('login')
     else:
         form = CompanyForm
