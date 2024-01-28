@@ -6,20 +6,8 @@ from base.models import Profile, Company, InvitationCode
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    user  = user.instance
     if created:
-        profile = Profile.objects.create(user=user)
-        inv_code = getattr(instance, '_inv_code', None)
-        
-        if inv_code:
-            invitation_code = InvitationCode.objects.get(code=inv_code)
-            profile.inv_code = invitation_code
-            profile.save()
-            
-            invitation_code.is_used = True
-            invitation_code.save()
-            
-        
+        pass
     user_group, _ = Group.objects.get_or_create(name='User')
     user_group.user_set.add(instance)
 
@@ -28,16 +16,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def create_company_user_profile(sender, instance, created, **kwargs):
     user = instance.owner
     if created:
-        profile = Profile.objects.get_or_create(user=user)
-        
-        inv_code = getattr(instance, '_inv_code', None)
-        if inv_code:
-            invitation_code = InvitationCode.objects.get(code=inv_code)
-            profile.inv_code = invitation_code
-            profile.save()
-            
-            invitation_code.is_used = True
-            invitation_code.save()
-
+        pass
     boss_group, _ = Group.objects.get_or_create(name='Boss')
     boss_group.user_set.add(user)

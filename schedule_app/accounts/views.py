@@ -28,21 +28,24 @@ def company_register(request):
         company_form = CompanyForm(request.POST)
         
         if user_form.is_valid() and company_form.is_valid():
-            user = user_form.save(commit=False)
-            
+            user = user_form.save()
+
             company = company_form.save(commit=False)
             company.owner = user
             company.save()
             
             custom_inv_code = company_form.cleaned_data['custom_inv_code']
-            company.generate_invitation_code(custom_code=custom_inv_code)
             
+            invitation_code = InvitationCode.objects.create(company=company, code=custom_inv_code, is_used=True)
+            Profile.objects.create(user=user, inv_code=invitation_code)
+
             login(request, user)
             return redirect('accounts:login')
     else:
         user_form = UserCreationForm()
         company_form = CompanyForm()
+
     return render(request, 'accounts/register_company.html', {
-    'user_form': user_form,
-    'company_form': company_form
+        'user_form': user_form,
+        'company_form': company_form
     })
