@@ -9,12 +9,16 @@ def user_register(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
+            user = form.save()
             inv_code = form.cleaned_data['inv_code']
-            invitation = InvitationCode.objects.get(code=inv_code)
-            invitation.is_used = True
+
+            invitation = InvitationCode.objects.create(code=inv_code, is_used=True)
+
+            Profile.objects.create(user=user, inv_code=invitation)
+
+            invitation.user = user
             invitation.save()
 
-            user = form.save()
             login(request, user)
             return redirect('accounts:login')
     else:
