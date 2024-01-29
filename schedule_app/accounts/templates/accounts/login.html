@@ -1,17 +1,32 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dater - Aplikacja do Harmonogramów</title>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/style.css' %}">
 </head>
-
-<h1>Hello</h1>
-
-<form method='POST'>
-  {% csrf_token %} 
-  {{ form.as_p }}
-  <button type="submit">Log in</button>
-</form>
+<body>
+<div class="container">
+    <div class="left-column">
+        <!-- Zdjęcia po lewej stronie -->
+    </div>
+    <div class="right-column">
+        <h1>Dater aplikacji do harmonogramów</h1>
+        <p>Aplikacja "Dater" to innowacyjne rozwiązanie dla menedżerów i zespołów HR, które ułatwia tworzenie i zarządzanie grafikami pracy pracowników. Dzięki jej funkcjonalnościom można łatwo przydzielać zmiany, śledzić dostępność pracowników i reagować na zmiany w czasie rzeczywistym. "Dater" zapewnia przejrzystą komunikację między zarządem a pracownikami, minimalizując ryzyko konfliktów grafikowych i zwiększając efektywność planowania zasobów ludzkich. To narzędzie, które stanowi most między elastycznym harmonogramowaniem a potrzebami operacyjnymi firmy.</p>
+        <h5>Masz już konto? Zaloguj się poniżej</h5>
+        <form method='POST'>
+            {% csrf_token %} 
+            {{ form.as_p }}
+            <button type="submit" class="button">Log in</button>
+        </form>
+        <h5>Nie masz konta a dostałeś swój numer zarejestruj się tutaj:</h5>
+        <button class="button">Rejestracja użytkownika</button>
+        <h5>Chcesz efektywniej zarządzać swoim zespołem/firmą? Zapraszamy do zarejestrowania firmy:</h5>
+        <button class="button">Rejestracja firmy</button>
+    </div>
+</div>
+</body>
+</html>
