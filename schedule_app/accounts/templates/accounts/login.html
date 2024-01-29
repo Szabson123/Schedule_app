@@ -23,9 +23,9 @@
             <button type="submit" class="button">Log in</button>
         </form>
         <h5>Nie masz konta a dostałeś swój numer zarejestruj się tutaj:</h5>
-        <button class="button">Rejestracja użytkownika</button>
+        <a class="button" href="{% url 'accounts:user_register' %}">Rejestracja użytkownika</a>
         <h5>Chcesz efektywniej zarządzać swoim zespołem/firmą? Zapraszamy do zarejestrowania firmy:</h5>
-        <button class="button">Rejestracja firmy</button>
+        <a class="button" href="{% url 'accounts:company_register' %}">Rejestracja firmy</a>
     </div>
 </div>
 </body>
