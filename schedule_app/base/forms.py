@@ -47,3 +47,4 @@ class UserLoginForm(AuthenticationForm):
                 if not InvitationCode.objects.filter(user=user, code=inv_code):
                     raise forms.ValidationError("Nieprawidłowy kod zaproszenia")
         return cleaned_data
+
