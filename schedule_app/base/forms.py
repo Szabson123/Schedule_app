@@ -5,6 +5,7 @@ from base.models import Profile, User, Company, InvitationCode
 
 class UserForm(UserCreationForm):
     inv_code = forms.CharField(required=True)
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'inv_code', 'password1', 'password2']
@@ -23,3 +24,10 @@ class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = ['name', 'email', 'custom_inv_code']
+
+
+class UserCompanyForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'password1', 'password2']
