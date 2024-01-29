@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
 
 from base.models import User, Profile, Company, InvitationCode
-from base.forms import UserForm, CompanyForm, UserCompanyForm
+from base.forms import UserForm, CompanyForm, UserCompanyForm, UserLoginForm
+
+
+class UserLoginView(LoginView):
+    form_class = UserLoginForm
 
 
 def user_register(request):
@@ -55,3 +60,5 @@ def company_register(request):
         'user_form': user_form,
         'company_form': company_form
     })
+
+
