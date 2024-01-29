@@ -10,6 +10,9 @@ class InvitationCode(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     code = models.CharField(max_length=6)
     is_used = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.code} - {self.user.first_name} {self.user.last_name}'
     
 
 class Company(models.Model):

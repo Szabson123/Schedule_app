@@ -38,6 +38,9 @@ def company_register(request):
             invitation_code = InvitationCode.objects.create(company=company, code=custom_inv_code, is_used=True)
             Profile.objects.create(user=user, inv_code=invitation_code)
 
+            invitation_code.user = user
+            invitation_code.save()
+
             login(request, user)
             return redirect('accounts:login')
     else:
