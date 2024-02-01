@@ -38,3 +38,9 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
 
+
+class Event(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TimeField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
