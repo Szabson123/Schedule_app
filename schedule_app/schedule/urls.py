@@ -1,9 +1,10 @@
 from django.urls import path
-from schedule.views import main_page, month_calendar
+from schedule.views import main_page, month_calendar, CalendarView
 
-app_name = 'accounts'
+
+app_name = 'schedule'
 
 urlpatterns = [
     path('main_page/', main_page, name='main_page'),
-    path('month_calendar/<int:year>/<str:month>/', month_calendar, name='month_calendar')
+    path('month_calendar/', CalendarView.as_view(), name='month_calendar'),
 ]
