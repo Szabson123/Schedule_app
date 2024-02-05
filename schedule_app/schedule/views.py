@@ -2,11 +2,12 @@ from typing import Any
 from django.shortcuts import render, redirect
 import calendar
 from calendar import HTMLCalendar
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from datetime import datetime, date
 from django.utils.safestring import mark_safe
 from datetime import timedelta
 
+from base.forms import CreateEventForm
 from base.models import Event
 from schedule.utils import UserCalendar
 
@@ -47,3 +48,15 @@ def next_month(d):
     next_month = last + timedelta(days=1)
     month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
     return month
+
+
+class CreateEventView(CreateView):
+    model = Event
+    form_class = CreateEventForm
+    template_name = 'schedule/create_event.html'
+    success_url = 'month_calendar'
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    

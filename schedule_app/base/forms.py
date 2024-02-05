@@ -1,6 +1,7 @@
 from django import forms
+from django.forms import DateInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from base.models import Profile, User, Company, InvitationCode
+from base.models import Profile, User, Company, InvitationCode, Event
 
 
 class UserForm(UserCreationForm):
@@ -48,3 +49,12 @@ class UserLoginForm(AuthenticationForm):
                     raise forms.ValidationError("Nieprawidłowy kod zaproszenia")
         return cleaned_data
 
+
+class CreateEventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        widgets = {
+        'start_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        'end_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        }
+        fields = ['name', 'description', 'start_time', 'end_time']
