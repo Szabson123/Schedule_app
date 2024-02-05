@@ -1,6 +1,13 @@
-<center>
-   <h1>Welcome</h1>
-<h2>This is yours calendar for this month:</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'schedule/style.css' %}">
+</head>
+<body>
+    <h1>{{ calendar }}</h1>
+</body>
+</html>
 
-{{ calendar }}
-</center>
