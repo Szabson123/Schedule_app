@@ -68,4 +68,4 @@ class UpdateEventView(UpdateView):
     template_name = 'schedule/update_event.html'
     
     def get_success_url(self):
-        return reverse('month_calendar')
+        return reverse('schedule:month_calendar')
