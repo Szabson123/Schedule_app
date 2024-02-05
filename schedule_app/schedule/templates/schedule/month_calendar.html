@@ -11,8 +11,8 @@
    <hr>
    <div class="clearfix">
       <a class="btn btn-outline-primary left" href="{% url 'schedule:month_calendar' %}?{{ prev_month }}"> Previous Month </a>
-      <a class="btn btn-outline-primary right" href="{% url 'schedule:create_event' %}"> Create Event </a>
       <a class="btn btn-outline-primary right" href="{% url 'schedule:month_calendar' %}?{{ next_month }}"> Next Month </a>
+      <a class="btn btn-outline-primary right " href="{% url 'schedule:create_event' %}"> Create Event </a>
   </div>  
     <h1>{{ calendar }}</h1>
    {% endblock %}

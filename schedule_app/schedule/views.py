@@ -1,16 +1,17 @@
 from typing import Any
+from django.urls import reverse
 from django.shortcuts import render, redirect
-import calendar
-from calendar import HTMLCalendar
-from django.views.generic import ListView, CreateView
-from datetime import datetime, date
+from django.views.generic import ListView, CreateView, UpdateView
 from django.utils.safestring import mark_safe
-from datetime import timedelta
 
 from base.forms import CreateEventForm
 from base.models import Event
 from schedule.utils import UserCalendar
 
+from datetime import datetime, date
+import calendar
+from calendar import HTMLCalendar
+from datetime import timedelta
 
 def main_page(request):
     return render(request, 'schedule/main_page.html')
@@ -60,3 +61,11 @@ class CreateEventView(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
     
+
+class UpdateEventView(UpdateView):
+    model = Event
+    form_class = CreateEventForm
+    template_name = 'schedule/update_event.html'
+    
+    def get_success_url(self):
+        return reverse('month_calendar')
