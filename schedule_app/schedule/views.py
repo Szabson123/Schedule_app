@@ -1,11 +1,11 @@
 from typing import Any
 from django.urls import reverse
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView, UpdateView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.utils.safestring import mark_safe
 
 from base.forms import CreateEventForm
-from base.models import Event
+from base.models import Event, InvitationCode, Profile, Company
 from schedule.utils import UserCalendar
 
 from datetime import datetime, date
@@ -69,3 +69,24 @@ class UpdateEventView(UpdateView):
     
     def get_success_url(self):
         return reverse('schedule:month_calendar')
+
+
+class WorkersView(ListView):
+    model = InvitationCode
+    template_name = 'schedule/workers_list.html'
+    context_object_name = 'codes'
+
+    def get_queryset(self):
+        company = get_object_or_404(Company, owner=self.request.user)
+        return InvitationCode.objects.filter(company=company).select_related('user')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['show_generate_code_button'] = True
+        return context
+
+    def post(self, request, *args, **kwargs):
+        company = Company.objects.get(owner=request.user)
+        new_code = company.generate_invitation_code()
+        return redirect(reverse('schedule:workers_view'))
+

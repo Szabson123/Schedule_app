@@ -1,0 +1,20 @@
+<h2>Kody zaproszeń i pracownicy</h2>
+<ul>
+  {% for code in codes %}
+    <li>
+      Kod: {{ code.code }} -
+      {% if code.user %}
+        {{ code.user.first_name }} {{ code.user.last_name }}
+      {% else %}
+        Kod nieprzypisany
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+
+{% if show_generate_code_button %}
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Generuj nowy kod</button>
+</form>
+{% endif %}
