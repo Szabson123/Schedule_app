@@ -10,7 +10,7 @@ def addingUsers():
             break
         candidate_list.append(candidate)
     return candidate_list
-    
+
 
 def addingPosibilties():
     for candidate in candidate_list:
