@@ -1,5 +1,5 @@
 from django.urls import path
-from schedule.views import main_page, month_calendar, CalendarView
+from schedule.views import main_page, CalendarView
 
 
 app_name = 'schedule'
