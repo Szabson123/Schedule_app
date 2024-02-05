@@ -16,7 +16,7 @@
   
   .calendar td {
     width: 200px;
-    height: 170px;
+    height: 140px;
     padding: 20px 0px 0px 5px;
   }
   
@@ -32,7 +32,15 @@
     height: 100%;
     padding: 0px 5px 0px 20px;
   }
+
+  .left {
+    float: left;
+  }
   
-  a {
-    color: #17a2b8;
+  .right {
+    float: right;
+  }
+  
+  .clearfix {
+    margin: 15px;
   }
