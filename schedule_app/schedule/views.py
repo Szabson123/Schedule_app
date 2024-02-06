@@ -1,7 +1,8 @@
 from typing import Any
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.views.generic import (ListView, CreateView,
+                                  UpdateView, DetailView, DeleteView)
 from django.utils.safestring import mark_safe
 
 from base.forms import CreateEventForm
@@ -94,3 +95,12 @@ class WorkersView(ListView):
         new_code = company.generate_invitation_code()
         return redirect(reverse('schedule:workers_view'))
 
+
+class DeleteWorkersView(DeleteView):
+    model = InvitationCode
+    template_name = 'schedule/workers_delete.html'
+    success_url = reverse_lazy('schedule:workers_list')
+
+    def get_queryset(self):
+        owner = self.request.user
+        return self.model.objects.filter(user=owner)

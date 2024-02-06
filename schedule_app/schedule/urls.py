@@ -1,6 +1,7 @@
 from django.urls import path
 from schedule.views import (main_page, CalendarView,
-                            CreateEventView, UpdateEventView, WorkersView)
+                            CreateEventView, UpdateEventView,
+                            WorkersView, DeleteWorkersView)
 
 
 app_name = 'schedule'
@@ -10,6 +11,8 @@ urlpatterns = [
     path('month_calendar/', CalendarView.as_view(), name='month_calendar'),
     path('create_event/', CreateEventView.as_view(), name='create_event'),
     path('update_event/<int:pk>/', UpdateEventView.as_view(), name='update_event'),
-    path('workers_list/', WorkersView.as_view(), name='workers_view')
+
+    path('workers_list/', WorkersView.as_view(), name='workers_view'),
+    path('worker_delete', DeleteWorkersView.as_view(), name='worker_delete'),
 
 ]

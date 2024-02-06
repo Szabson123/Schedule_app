@@ -1,0 +1,6 @@
+<h2>Czy na pewno chcesz usunąć wydarzenie "{{ object.name }}"?</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Usuń" />
+    <a href="{{ success_url }}">Anuluj</a>
+</form>
