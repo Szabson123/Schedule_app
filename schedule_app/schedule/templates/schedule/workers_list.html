@@ -3,7 +3,9 @@
   {% for code in codes %}
     <li>
       Kod: {{ code.code }} -
-      <button><a href="{% url 'schedule:worker_delete'%}"></a>Usuń</button>
+      <a href="{% url 'schedule:worker_delete' code.id %}">
+        <button> Usuń </button>
+      </a>
       {% if code.user %}
         {{ code.user.first_name }} {{ code.user.last_name }}
       {% else %}

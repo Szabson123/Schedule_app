@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import (ListView, CreateView,
                                   UpdateView, DetailView, DeleteView)
 from django.utils.safestring import mark_safe
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from base.forms import CreateEventForm
 from base.models import Event, InvitationCode, Profile, Company
@@ -96,11 +97,18 @@ class WorkersView(ListView):
         return redirect(reverse('schedule:workers_view'))
 
 
-class DeleteWorkersView(DeleteView):
+class DeleteWorkersView(LoginRequiredMixin, DeleteView):
     model = InvitationCode
     template_name = 'schedule/workers_delete.html'
-    success_url = reverse_lazy('schedule:workers_list')
+    success_url = reverse_lazy('schedule:workers_view')
 
     def get_queryset(self):
-        owner = self.request.user
-        return self.model.objects.filter(user=owner)
+        company = get_object_or_404(Company, owner=self.request.user)
+        return InvitationCode.objects.filter(company=company)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
