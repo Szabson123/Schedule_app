@@ -3,11 +3,9 @@
   {% for code in codes %}
     <li>
       Kod: {{ code.code }} -
-      <a href="{% url 'schedule:worker_delete' code.id %}">
-        <button> Usuń </button>
-      </a>
+      <a href="{% url 'schedule:worker_delete' code.id %}"><button>Usuń</button></a>
       {% if code.user %}
-        {{ code.user.first_name }} {{ code.user.last_name }}
+        -- {{ code.user.first_name }} {{ code.user.last_name }}
       {% else %}
         Kod nieprzypisany
       {% endif %}
