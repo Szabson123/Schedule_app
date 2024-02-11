@@ -13,6 +13,6 @@ urlpatterns = [
     path('update_event/<int:pk>/', UpdateEventView.as_view(), name='update_event'),
 
     path('workers_list/', WorkersView.as_view(), name='workers_view'),
-    path('worker_delete<int:pk>/', DeleteWorkersView.as_view(), name='worker_delete'),
+    path('worker_delete/<int:pk>/', DeleteWorkersView.as_view(), name='worker_delete'),
 
 ]
