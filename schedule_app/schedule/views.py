@@ -5,6 +5,7 @@ from django.views.generic import (ListView, CreateView,
                                   UpdateView, DetailView, DeleteView)
 from django.utils.safestring import mark_safe
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 from base.forms import CreateEventForm
 from base.models import Event, InvitationCode, Profile, Company
@@ -16,11 +17,12 @@ from calendar import HTMLCalendar
 from datetime import timedelta
 
 
+@login_required()
 def main_page(request):
     return render(request, 'schedule/main_page.html')
 
 
-class CalendarView(ListView):
+class CalendarView(ListView, LoginRequiredMixin):
     model = Event
     template_name = 'schedule/month_calendar.html'
 
@@ -57,7 +59,7 @@ def next_month(d):
     return month
 
 
-class CreateEventView(CreateView):
+class CreateEventView(CreateView, LoginRequiredMixin):
     model = Event
     form_class = CreateEventForm
     template_name = 'schedule/create_event.html'
@@ -68,7 +70,7 @@ class CreateEventView(CreateView):
         return super().form_valid(form)
     
 
-class UpdateEventView(UpdateView):
+class UpdateEventView(UpdateView, LoginRequiredMixin):
     model = Event
     form_class = CreateEventForm
     template_name = 'schedule/update_event.html'
@@ -77,7 +79,7 @@ class UpdateEventView(UpdateView):
         return reverse('schedule:month_calendar')
 
 
-class WorkersView(ListView):
+class WorkersView(ListView, LoginRequiredMixin):
     model = InvitationCode
     template_name = 'schedule/workers_list.html'
     context_object_name = 'codes'
