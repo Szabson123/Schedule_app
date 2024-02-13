@@ -1,4 +1,5 @@
 from typing import Any
+from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -30,11 +31,16 @@ def main_page(request):
 class CalendarView(ListView, LoginRequiredMixin):
     model = Event
     template_name = 'schedule/month_calendar.html'
+    
+    def get_queryset(self):
+        return Event.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
-        cal = UserCalendar(d.year, d.month)
+        
+        cal = UserCalendar(self.request.user, d.year, d.month)
+        
         html_cal = cal.formatmonth(withyear=True)
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
@@ -68,11 +74,13 @@ class CreateEventView(CreateView, LoginRequiredMixin):
     model = Event
     form_class = CreateEventForm
     template_name = 'schedule/create_event.html'
-    success_url = 'month_calendar'
     
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('schedule:month_calendar')
     
 
 class UpdateEventView(UpdateView, LoginRequiredMixin):
