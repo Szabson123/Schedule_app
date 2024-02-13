@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
-
+from django.http import HttpResponse
 from base.models import User, Profile, Company, InvitationCode
 from base.forms import UserForm, CompanyForm, UserCompanyForm, UserLoginForm
 
@@ -16,11 +16,16 @@ def user_register(request):
         if form.is_valid():
             user = form.save()
             inv_code = form.cleaned_data['inv_code']
+            try:
+                invitation = InvitationCode.objects.get(code=inv_code, is_used=False)
+            except InvitationCode.DoesNotExist:
+                return HttpResponse("Nieprawidłowy kod zaproszenia lub kod został już użyty.", status=400)
 
-            invitation = InvitationCode.objects.create(code=inv_code, is_used=True)
-
+            user = form.save(commit=False)
+            user.save()
+            
             Profile.objects.create(user=user, inv_code=invitation)
-
+            invitation.is_used = True
             invitation.user = user
             invitation.save()
 
