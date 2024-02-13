@@ -1,67 +1,67 @@
 .calendar {
-    width: 98%;
-    margin: auto;
-    font-size: 13px;
-  }
-  
-  .calendar tr, .calendar td {
-    border: 1px solid black;
-  }
-  
-  .calendar th {
-    padding: 10px;
-    text-align: center;
-    font-size: 18px;
-  }
-  
-  .calendar td {
-    width: 200px;
-    height: 170px;
-    padding: 20px 0px 0px 5px;
-  }
-  
-  .month {
-    font-size: 25px;
-  }
-  
-  .date {
-    font-size: 16px;
-  }
-  
-  ul {
-    height: 100%;
-    padding: 0px 5px 0px 20px;
-  }
+  width: 98%;
+  margin: auto;
+  font-size: 13px;
+}
 
-  .left {
-    float: left;
-  }
-  
-  .right {
-    float: right;
-  }
-  
-  .clearfix {
-    margin: 15px;
-  }
+.calendar tr, .calendar td {
+  border: 1px solid black;
+}
+
+.calendar th {
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.calendar td {
+  width: 200px;
+  height: 170px;
+  padding: 20px 0px 0px 5px;
+}
+
+.month {
+  font-size: 25px;
+}
+
+.date {
+  font-size: 16px;
+}
+
+ul {
+  height: 100%;
+  padding: 0px 5px 0px 20px;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.clearfix {
+  margin: 15px;
+}
 
 .navbar {
-    overflow: hidden;
-    background-color: #333;
-    position: fixed;
-    top: 0;
-    width: 100%;
-  }
-  .navbar a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-  }
-  .navbar a:hover {
-    background-color: #ddd;
-    color: black;
-  }
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
 

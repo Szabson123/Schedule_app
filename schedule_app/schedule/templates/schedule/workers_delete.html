@@ -1,6 +1,12 @@
-<h2>Czy na pewno chcesz usunąć ten kod "{{ object.name }}"?</h2>
-<form method="post">
-    {% csrf_token %}
-    <input type="submit" value="Usuń" />
-    <a href="{{ success_url }}">Anuluj</a>
-</form>
+{% extends 'schedule/base.html' %}
+
+{% block content %}
+    <div class='container text-center'>
+    <h2>Czy na pewno chcesz usunąć ten kod "{{ object.code }}"?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Usuń</button>
+        <button class='btn btn-primary' href="{{ success_url }}">Anuluj</button>
+    </form>
+</div>
+{% endblock %}
