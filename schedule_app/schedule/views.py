@@ -1,15 +1,20 @@
 from typing import Any
+from django.http import HttpRequest
+from django.http.response import HttpResponse as HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import (ListView, CreateView,
                                   UpdateView, DetailView, DeleteView)
 from django.utils.safestring import mark_safe
+from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+
 
 from base.forms import CreateEventForm
 from base.models import Event, InvitationCode, Profile, Company
 from schedule.utils import UserCalendar
+from base.decorators import check_user_able_to_see_page
 
 from datetime import datetime, date
 import calendar
@@ -84,6 +89,11 @@ class WorkersView(ListView, LoginRequiredMixin):
     template_name = 'schedule/workers_list.html'
     context_object_name = 'codes'
 
+    @method_decorator(check_user_able_to_see_page)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+    
+    
     def get_queryset(self):
         company = get_object_or_404(Company, owner=self.request.user)
         return InvitationCode.objects.filter(company=company).select_related('user')
