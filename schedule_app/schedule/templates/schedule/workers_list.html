@@ -1,26 +1,28 @@
 {% extends 'schedule/base.html' %}
 <!DOCTYPE html>
 {% block content %}
-<h2>Kody zaproszeń i pracownicy</h2>
-<ul>
-  {% for code in codes %}
-    <li>
-      Kod: {{ code.code }} -
-      <a href="{% url 'schedule:worker_delete' code.id %}"><button>Usuń</button></a>
-      {% if code.user %}
-        -- {{ code.user.first_name }} {{ code.user.last_name }}
-      {% else %}
-        Kod nieprzypisany
-      {% endif %}
-    </li>
-  {% endfor %}
-</ul>
+<div class="container text-center">
+  <h2>Kody zaproszeń i pracownicy</h2>
 
-{% if show_generate_code_button %}
-<form method="post">
-  {% csrf_token %}
-  <button type="submit">Generuj nowy kod</button>
-</form>
-{% endif %}
+  {% if show_generate_code_button %}
+  <form method="post" class="mb-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Generuj nowy kod</button>
+  </form>
+  {% endif %}
 
+  <ul class="list-group">
+    {% for code in codes %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Kod: {{ code.code }}
+        {% if code.user %}
+          -- {{ code.user.first_name }} {{ code.user.last_name }}
+        {% else %}
+          Kod nieprzypisany
+        {% endif %}
+        <a href="{% url 'schedule:worker_delete' code.id %}" class="btn btn-danger btn-sm">Usuń</a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}
