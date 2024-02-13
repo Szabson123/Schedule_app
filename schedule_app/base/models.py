@@ -48,3 +48,23 @@ class Event(models.Model):
     
     def __str__(self):
         return self.name
+    
+
+class Timetable(models.Model):
+    day = models.DateField()
+    start = models.TimeField()
+    end = models.TimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return str(self.day)
+
+
+class Availability(models.Model):
+    availability_day = models.DateField()
+    availability_start = models.TimeField()
+    availability_end = models.TimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return str(self.availability_day)
