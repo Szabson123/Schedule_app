@@ -11,11 +11,15 @@ class UserCalendar(HTMLCalendar):
         super(UserCalendar, self).__init__()
 
     def formatday(self, day, events):
-        events_per_day = events.filter(start_time__day=day)
+        events_start_per_day = events.filter(start_time__day=day)
+        events_end_per_day = events.filter(end_time__day=day)
         d = ''
-        for event in events_per_day:
+        for event in events_start_per_day:
             event_url = reverse('schedule:update_event', args=(event.id,))
-            d += f"<li><a href='{event_url}'>{event.name}</a></li>"
+            d += f'<li><a style="color:green; text-decoration:none;" href="{event_url}">{event.name}</a></li>'
+        for event in events_end_per_day:
+            event_url = reverse('schedule:update_event', args=(event.id,))
+            d += f'<li><a style="color:red; text-decoration:none;" href="{event_url}">{event.name}</a></li>'
         if day != 0:
             return f"<td><span class='date'>{day}</span><ul> {d} </ul></td>"
         return '<td></td>'
