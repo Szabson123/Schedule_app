@@ -11,8 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-
-from base.forms import CreateEventForm
+from base.forms import CreateEventForm, CreateAvailabilityForm
 from base.models import Event, InvitationCode, Profile, Company, Availability, Timetable
 from schedule.utils import UserCalendar
 from base.decorators import check_user_able_to_see_page
@@ -145,4 +144,17 @@ class AvaibilityView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+
+class CreateAvaibilityView(LoginRequiredMixin, CreateView):
+    template_name = 'schedule/create_avaibility.html'
+    model = Availability
+    form_class = CreateAvailabilityForm
+    
+    def get_success_url(self):
+        return reverse('schedule:month_calendar')
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
     

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from base.models import Profile, User, Company, InvitationCode, Event
+from base.models import Profile, User, Company, InvitationCode, Event, Availability
 
 
 class UserForm(UserCreationForm):
@@ -58,3 +58,14 @@ class CreateEventForm(forms.ModelForm):
         'end_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
         }
         fields = ['name', 'description', 'start_time', 'end_time']
+        
+
+class CreateAvailabilityForm(forms.ModelForm):
+    class Meta:
+        model = Availability
+        widgets = {
+            'availability_day': forms.DateInput(attrs={'type': 'date'}),
+            'availability_start': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+            'availability_end': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+        }
+        fields = ['availability_day', 'availability_start', 'availability_end']
