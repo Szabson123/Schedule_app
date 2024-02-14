@@ -167,3 +167,20 @@ class CreateAvaibilityView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class TimetableView(LoginRequiredMixin, ListView):
+    template_name = 'schedule/timetable.html'
+    model = Availability
+    context_object_name = 'availabilities'
+    
+    @method_decorator(check_user_able_to_see_page)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+    
+    def get_queryset(self):
+        return Availability.objects.filter(upload=True)
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

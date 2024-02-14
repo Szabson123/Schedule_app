@@ -1,0 +1,13 @@
+{% extends 'schedule/base.html' %}
+<!DOCTYPE html>
+{% block content %}
+
+<div class="container text-center">
+    <ul>
+    {% for availability in availabilities %}
+        <li>{{ availability.user.first_name }} {{ availability.user.last_name }} {{ availability.availability_day }} {{ availability.availability_start|date:"H:i" }} {{ availability.availability_end|date:"H:i" }}</li>
+    {% endfor %}
+    </ul>
+</div>
+
+{%endblock%}

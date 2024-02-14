@@ -1,7 +1,7 @@
 from django.urls import path
 from schedule.views import (main_page, CalendarView,
                             CreateEventView, UpdateEventView,
-                            WorkersView, DeleteWorkersView, AvaibilityView, CreateAvaibilityView)
+                            WorkersView, DeleteWorkersView, AvaibilityView, CreateAvaibilityView, TimetableView)
 
 
 app_name = 'schedule'
@@ -17,5 +17,7 @@ urlpatterns = [
     
     path('avaibility/', AvaibilityView.as_view(), name='avaibility'),
     path('create_avaibility/', CreateAvaibilityView.as_view(), name='create_avaibility'),
+    
+    path('timetable/', TimetableView.as_view(), name='timetable')
 
 ]
