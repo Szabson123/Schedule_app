@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 
 from base.forms import CreateEventForm
-from base.models import Event, InvitationCode, Profile, Company
+from base.models import Event, InvitationCode, Profile, Company, Availability, Timetable
 from schedule.utils import UserCalendar
 from base.decorators import check_user_able_to_see_page
 
@@ -132,3 +132,17 @@ class DeleteWorkersView(LoginRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+
+class AvaibilityView(LoginRequiredMixin, ListView):
+    template_name = 'schedule/availability.html'
+    model = Availability
+    context_object_name = 'availabilities'
+    
+    def get_queryset(self):
+        Availability.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
