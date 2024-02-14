@@ -1,0 +1,27 @@
+{% extends 'schedule/base.html' %}
+<!DOCTYPE html>
+{% block content %}
+
+<div class="container text-center">
+<table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Godzina rozpoczęcia</th>
+        <th>Godzina zakończenia</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for availability in availabilities %}
+        <tr>
+          <td>{{ availability.availability_day }}</td>
+          <td>{{ availability.availability_start|date:"H:i" }}</td>
+          <td>{{ availability.availability_end|date:"H:i" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'schedule:create_avaibility' %}" class="btn btn-primary">Dodaj dostępność</a>
+</div>
+
+{% endblock %}

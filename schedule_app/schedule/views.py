@@ -139,7 +139,8 @@ class AvaibilityView(LoginRequiredMixin, ListView):
     context_object_name = 'availabilities'
     
     def get_queryset(self):
-        Availability.objects.filter(user=self.request.user)
+        return Availability.objects.filter(user=self.request.user)
+
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -152,7 +153,7 @@ class CreateAvaibilityView(LoginRequiredMixin, CreateView):
     form_class = CreateAvailabilityForm
     
     def get_success_url(self):
-        return reverse('schedule:month_calendar')
+        return reverse('schedule:avaibility')
     
     def form_valid(self, form):
         form.instance.user = self.request.user
