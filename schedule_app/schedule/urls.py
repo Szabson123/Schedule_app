@@ -16,6 +16,6 @@ urlpatterns = [
     path('worker_delete/<int:pk>/', DeleteWorkersView.as_view(), name='worker_delete'),
     
     path('avaibility/', AvaibilityView.as_view(), name='avaibility'),
-    path('create_avaibility/', CreateAvaibilityView.as_view(), name='create_avaibility')
+    path('create_avaibility/', CreateAvaibilityView.as_view(), name='create_avaibility'),
 
 ]

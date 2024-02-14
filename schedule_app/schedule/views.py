@@ -1,6 +1,6 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
 from django.http.response import HttpResponse as HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
@@ -139,12 +139,21 @@ class AvaibilityView(LoginRequiredMixin, ListView):
     context_object_name = 'availabilities'
     
     def get_queryset(self):
-        return Availability.objects.filter(user=self.request.user)
+        return Availability.objects.filter(user=self.request.user, upload=False)
 
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        if 'upload_id' in request.POST:
+            pk = request.POST.get('upload_id')
+            availability = get_object_or_404(Availability, pk=pk, user=request.user)
+            availability.upload = True
+            availability.save()
+            return HttpResponseRedirect(request.path_info)  # Odświeża stronę, zachowując ten sam URL
+        return super().post(request, *args, **kwargs)
     
 
 class CreateAvaibilityView(LoginRequiredMixin, CreateView):
@@ -158,4 +167,3 @@ class CreateAvaibilityView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
-    

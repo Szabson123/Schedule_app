@@ -12,13 +12,21 @@
       </tr>
     </thead>
     <tbody>
-      {% for availability in availabilities %}
+        {% for availability in availabilities %}
         <tr>
-          <td>{{ availability.availability_day }}</td>
-          <td>{{ availability.availability_start|date:"H:i" }}</td>
-          <td>{{ availability.availability_end|date:"H:i" }}</td>
+            <td>{{ availability.availability_day }}</td>
+            <td>{{ availability.availability_start|date:"H:i" }}</td>
+            <td>{{ availability.availability_end|date:"H:i" }}</td>
+            <td>
+                <form method="post" action="{% url 'schedule:avaibility' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="upload_id" value="{{ availability.pk }}" />
+                    <button type="submit" class="btn btn-success">Zgłoś</button>
+                </form>
+            </td>
         </tr>
-      {% endfor %}
+        {% endfor %}
+        
     </tbody>
   </table>
   <a href="{% url 'schedule:create_avaibility' %}" class="btn btn-primary">Dodaj dostępność</a>

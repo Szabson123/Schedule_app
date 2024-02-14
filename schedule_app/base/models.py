@@ -65,6 +65,7 @@ class Availability(models.Model):
     availability_start = models.TimeField()
     availability_end = models.TimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    upload = models.BooleanField(default=False, blank=True, null=True)
     
     def __str__(self):
         return str(self.availability_day)
