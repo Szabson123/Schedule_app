@@ -1,11 +1,12 @@
 {% extends 'schedule/base.html' %}
 <!DOCTYPE html>
 {% block content %}
-<div class="week-calendar">
-    <ul>
-        {% for date in week_dates %}
-        <li>{{ date|date:"D d M Y" }}</li>
-        {% endfor %}
-    </ul>
+<div class="week-calendar" style="display: flex; justify-content: space-around;">
+    {% for date in week_dates %}
+    <div>
+        <p>{{ date|date:"D" }}</p>
+        <p>{{ date|date:"d M Y" }}</p>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

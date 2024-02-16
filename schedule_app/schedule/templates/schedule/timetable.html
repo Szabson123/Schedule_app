@@ -2,12 +2,20 @@
 <!DOCTYPE html>
 {% block content %}
 
-<div class="container text-center">
-    <ul>
-    {% for availability in availabilities %}
-        <li>{{ availability.user.first_name }} {{ availability.user.last_name }} {{ availability.availability_day }} {{ availability.availability_start|date:"H:i" }} {{ availability.availability_end|date:"H:i" }}</li>
+<div class="week-calendar" style="display: flex; justify-content: space-around;">
+    {% for date in week_dates %}
+    <div>
+        <p>{{ date|date:"D" }}</p>
+        <p>{{ date|date:"d M Y" }}</p>
+    </div>
     {% endfor %}
-    </ul>
 </div>
 
-{%endblock%}
+<div class="container text-center">
+    {% for availability in availabilities %}
+        <li>{{ availability.user.first_name }} {{ availability.user.last_name }} {{ availability.availability_start|date:"H:i" }} {{ availability.availability_end|date:"H:i" }}</li>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

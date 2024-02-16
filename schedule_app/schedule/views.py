@@ -183,14 +183,8 @@ class TimetableView(LoginRequiredMixin, ListView):
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
+        today = datetime.now()
+        week_dates = get_week_dates(today)
+        context['week_dates'] = week_dates
         return context
-    
 
-def weekdates(request):
-    today = datetime.now()
-    week_dates = get_week_dates(today)
-    
-    context = {
-        'week_dates': week_dates,
-    }
-    return render(request, 'schedule/test.html', context)

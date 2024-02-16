@@ -64,4 +64,13 @@ ul {
   background-color: #ddd;
   color: black;
 }
+.week-calendar {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+}
 
+.week-calendar div {
+  text-align: center;
+}
