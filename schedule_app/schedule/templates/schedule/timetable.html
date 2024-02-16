@@ -1,21 +1,22 @@
 {% extends 'schedule/base.html' %}
 <!DOCTYPE html>
 {% block content %}
+</br>
+<center><h1>Dostępność twoich pracwoników</h1></center>
 
+<hr>
 <div class="week-calendar" style="display: flex; justify-content: space-around;">
-    {% for date in week_dates %}
+
+    {% for date, availabilities in week_dates.items %}
     <div>
         <p>{{ date|date:"D" }}</p>
         <p>{{ date|date:"d M Y" }}</p>
+        {% for availability in availabilities %}
+            <li>{{ availability.user.first_name }} {{ availability.user.last_name }} {{ availability.availability_start|date:"H:i" }} - {{ availability.availability_end|date:"H:i" }}</li>
+        {% endfor %}
     </div>
     {% endfor %}
 </div>
 
-<div class="container text-center">
-    {% for availability in availabilities %}
-        <li>{{ availability.user.first_name }} {{ availability.user.last_name }} {{ availability.availability_start|date:"H:i" }} {{ availability.availability_end|date:"H:i" }}</li>
-    {% endfor %}
-
-</div>
 
 {% endblock %}

@@ -21,6 +21,8 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import timedelta
 
+from django.db.models.functions import TruncDay
+from collections import defaultdict
 
 @login_required()
 def main_page(request):
@@ -185,6 +187,14 @@ class TimetableView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         today = datetime.now()
         week_dates = get_week_dates(today)
-        context['week_dates'] = week_dates
+        context['week_dates'] = {date: [] for date in week_dates}  # Utwórz słownik z datami tygodnia
+
+        availabilities = Availability.objects.filter(upload=True)
+        
+        for availability in availabilities:
+            if availability.availability_day in context['week_dates']:
+                context['week_dates'][availability.availability_day].append(availability)
+
         return context
+
 

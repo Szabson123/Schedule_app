@@ -41,6 +41,6 @@ class UserCalendar(HTMLCalendar):
 
 
 def get_week_dates(date):
-    start_of_week = date - timedelta(days=date.weekday())
+    start_of_week = date.date() - timedelta(days=date.weekday())
     week_dates = [start_of_week + timedelta(days=i) for i in range(7)]
     return week_dates
