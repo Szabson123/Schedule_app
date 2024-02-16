@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 from base.forms import CreateEventForm, CreateAvailabilityForm
 from base.models import Event, InvitationCode, Profile, Company, Availability, Timetable
-from schedule.utils import UserCalendar
+from schedule.utils import UserCalendar, get_week_dates
 from base.decorators import check_user_able_to_see_page
 
 from datetime import datetime, date
@@ -184,3 +184,13 @@ class TimetableView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+
+def weekdates(request):
+    today = datetime.now()
+    week_dates = get_week_dates(today)
+    
+    context = {
+        'week_dates': week_dates,
+    }
+    return render(request, 'schedule/test.html', context)

@@ -1,5 +1,5 @@
 from django.urls import path
-from schedule.views import (main_page, CalendarView,
+from schedule.views import (main_page, weekdates, CalendarView,
                             CreateEventView, UpdateEventView,
                             WorkersView, DeleteWorkersView, AvaibilityView, CreateAvaibilityView, TimetableView)
 
@@ -18,6 +18,6 @@ urlpatterns = [
     path('avaibility/', AvaibilityView.as_view(), name='avaibility'),
     path('create_avaibility/', CreateAvaibilityView.as_view(), name='create_avaibility'),
     
-    path('timetable/', TimetableView.as_view(), name='timetable')
-
+    path('timetable/', TimetableView.as_view(), name='timetable'),
+    path('test/', weekdates, name='test')
 ]

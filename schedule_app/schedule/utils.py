@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from base.models import Event
 from django.urls import reverse
@@ -39,3 +39,8 @@ class UserCalendar(HTMLCalendar):
             cal += f'{self.formatweek(week, events)}\n'
         return cal
 
+
+def get_week_dates(date):
+    start_of_week = date - timedelta(days=date.weekday())
+    week_dates = [start_of_week + timedelta(days=i) for i in range(7)]
+    return week_dates
