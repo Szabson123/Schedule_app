@@ -195,6 +195,8 @@ class TimetableView(LoginRequiredMixin, ListView):
             if availability.availability_day in context['week_dates']:
                 context['week_dates'][availability.availability_day].append(availability)
 
+        context['days_list'] = Availability.objects.values_list('availability_day', flat=True).distinct()
+        context['hours_list'] = Availability.objects.values_list('availability_start', flat=True).distinct()
         return context
 
 

@@ -2,6 +2,7 @@ from django import forms
 from django.forms import DateInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from base.models import Profile, User, Company, InvitationCode, Event, Availability
+from django.utils.functional import cached_property
 
 
 class UserForm(UserCreationForm):
@@ -69,3 +70,16 @@ class CreateAvailabilityForm(forms.ModelForm):
             'availability_end': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
         }
         fields = ['availability_day', 'availability_start', 'availability_end']
+
+
+class DayChoiceForm(forms.Form):
+    day = forms.DateField(label='Wybierz dzień', widget=forms.Select(choices=[]))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['day'].widget.choices = self.available_days_choices()
+
+    @cached_property
+    def available_days_choices(self):
+        days = Availability.objects.filter(upload=True).values_list('availability_day', flat=True).distinct()
+        return [(day, day) for day in days]

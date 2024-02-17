@@ -17,6 +17,19 @@
     </div>
     {% endfor %}
 </div>
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Dodaj dostępność</button>
+</form>
+
+{% if selected_day_availabilities %}
+    <h2>Dostępności dla {{ form.cleaned_data.day }}</h2>
+    <ul>
+    {% for availability in selected_day_availabilities %}
+        <li>{{ availability.user.username }}: od {{ availability.availability_start }} do {{ availability.availability_end }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
 
 
 {% endblock %}
