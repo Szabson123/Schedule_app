@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from base.forms import CreateEventForm, CreateAvailabilityForm
+from base.forms import CreateEventForm, CreateAvailabilityForm,DayChoiceForm
 from base.models import Event, InvitationCode, Profile, Company, Availability, Timetable
 from schedule.utils import UserCalendar, get_week_dates
 from base.decorators import check_user_able_to_see_page
@@ -175,28 +175,28 @@ class TimetableView(LoginRequiredMixin, ListView):
     template_name = 'schedule/timetable.html'
     model = Availability
     context_object_name = 'availabilities'
-    
+
     @method_decorator(check_user_able_to_see_page)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
-    
+
     def get_queryset(self):
         return Availability.objects.filter(upload=True)
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         today = datetime.now()
         week_dates = get_week_dates(today)
-        context['week_dates'] = {date: [] for date in week_dates}  # Utwórz słownik z datami tygodnia
+        context['week_dates'] = {date: [] for date in week_dates}
 
-        availabilities = Availability.objects.filter(upload=True)
-        
+        availabilities = self.get_queryset()
+
         for availability in availabilities:
             if availability.availability_day in context['week_dates']:
                 context['week_dates'][availability.availability_day].append(availability)
 
-        context['days_list'] = Availability.objects.values_list('availability_day', flat=True).distinct()
-        context['hours_list'] = Availability.objects.values_list('availability_start', flat=True).distinct()
+        context['form'] = DayChoiceForm()
+
         return context
 
 

@@ -77,9 +77,9 @@ class DayChoiceForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['day'].widget.choices = self.available_days_choices()
+        self.fields['day'].widget.choices = self.available_days_choices
 
-    @cached_property
+    @property
     def available_days_choices(self):
         days = Availability.objects.filter(upload=True).values_list('availability_day', flat=True).distinct()
-        return [(day, day) for day in days]
+        return [(day, day.strftime('%Y-%m-%d')) for day in days]
