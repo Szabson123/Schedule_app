@@ -75,11 +75,11 @@ class CreateAvailabilityForm(forms.ModelForm):
 class DayChoiceForm(forms.Form):
     day = forms.DateField(label='Wybierz dzień', widget=forms.Select(choices=[]))
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['day'].widget.choices = self.available_days_choices
-
-    @property
-    def available_days_choices(self):
-        days = Availability.objects.filter(upload=True).values_list('availability_day', flat=True).distinct()
-        return [(day, day.strftime('%Y-%m-%d')) for day in days]
+    class Meta:
+        model = Availability
+        widgets = {
+            'day': forms.DateInput(attrs={'type': 'date'}),
+            'start': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+            'end': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+        }
+        fields = ['start', 'day', 'availability_end', 'user']
