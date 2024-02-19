@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from base.forms import CreateEventForm, CreateAvailabilityForm,DayChoiceForm
+from base.forms import CreateEventForm, CreateAvailabilityForm, TimetableForm
 from base.models import Event, InvitationCode, Profile, Company, Availability, Timetable
 from schedule.utils import UserCalendar, get_week_dates
 from base.decorators import check_user_able_to_see_page
@@ -175,6 +175,7 @@ class TimetableView(LoginRequiredMixin, ListView):
     template_name = 'schedule/timetable.html'
     model = Availability
     context_object_name = 'availabilities'
+    form_class = TimetableForm
 
     @method_decorator(check_user_able_to_see_page)
     def dispatch(self, *args, **kwargs):
@@ -188,15 +189,34 @@ class TimetableView(LoginRequiredMixin, ListView):
         today = datetime.now()
         week_dates = get_week_dates(today)
         context['week_dates'] = {date: [] for date in week_dates}
+        
+        week_dates_timetable = get_week_dates(today)
+        context['week_dates_timetable'] = {date: [] for date in week_dates_timetable}
 
         availabilities = self.get_queryset()
+        timetables = Timetable.objects.all()
+        context['timetables'] = timetables
 
         for availability in availabilities:
             if availability.availability_day in context['week_dates']:
                 context['week_dates'][availability.availability_day].append(availability)
+        
+        for timetable in timetables:
+            if timetable.day in context['week_dates_timetable']:
+                context['week_dates_timetable'][timetable.day].append(timetable)
 
-        context['form'] = DayChoiceForm()
-
+        if 'form' not in context:  
+            context['form'] = self.form_class()
         return context
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            timetable = form.save(commit=False)
+            timetable.save()
+            return redirect('schedule:timetable')
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
 
 

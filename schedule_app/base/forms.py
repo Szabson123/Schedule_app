@@ -72,8 +72,7 @@ class CreateAvailabilityForm(forms.ModelForm):
         fields = ['availability_day', 'availability_start', 'availability_end']
 
 
-class DayChoiceForm(forms.ModelForm):
-    day = forms.DateField(label='Wybierz dzień', widget=forms.Select(choices=[]))
+class TimetableForm(forms.ModelForm):
     class Meta:
         model = Timetable
         widgets = {
@@ -81,4 +80,4 @@ class DayChoiceForm(forms.ModelForm):
             'start': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
             'end': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
         }
-        fields = ['start', 'day', 'end', 'user']
+        fields = ['user', 'day', 'start', 'end']

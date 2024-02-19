@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 {% block content %}
 </br>
-<center><h1>Dostępność twoich pracwoników</h1></center>
+<center><h1>Dostępność twoich pracowników</h1></center>
 
 <hr>
 <div class="week-calendar" style="display: flex; justify-content: space-around;">
@@ -16,12 +16,27 @@
         {% endfor %}
     </div>
     {% endfor %}
+    
 </div>
+<hr>
+
+<center><h1>Grafik</h1></center>
+
+<hr>
+<div class="week-calendar" style="display: flex; justify-content: space-around;">
+
+    {% for date, timetables in week_dates_timetable.items %}
+    <div>
+        <p>{{ date|date:"D" }}</p>
+        <p>{{ date|date:"d M Y" }}</p>
+        {% for timetable in timetables %}
+            <li>{{ timetable.user.first_name }} {{ timetable.user.last_name }} {{ timetable.start|date:"H:i" }} - {{ timetable.end|date:"H:i" }}</li>
+        {% endfor %}
+        </div>
+    {% endfor %}
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Pokaz dostępność</button>
+    <button type="submit">Dodaj do grafiku</button>
 </form>
-
-
 {% endblock %}

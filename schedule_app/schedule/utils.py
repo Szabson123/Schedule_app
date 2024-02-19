@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
-from base.models import Event
+from base.models import Event, Timetable
 from django.urls import reverse
 
 class UserCalendar(HTMLCalendar):
