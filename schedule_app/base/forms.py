@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from base.models import Profile, User, Company, InvitationCode, Event, Availability
+from base.models import Profile, User, Company, InvitationCode, Event, Availability, Timetable
 from django.utils.functional import cached_property
 
 
@@ -72,14 +72,13 @@ class CreateAvailabilityForm(forms.ModelForm):
         fields = ['availability_day', 'availability_start', 'availability_end']
 
 
-class DayChoiceForm(forms.Form):
+class DayChoiceForm(forms.ModelForm):
     day = forms.DateField(label='Wybierz dzień', widget=forms.Select(choices=[]))
-
     class Meta:
-        model = Availability
+        model = Timetable
         widgets = {
             'day': forms.DateInput(attrs={'type': 'date'}),
             'start': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
             'end': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
         }
-        fields = ['start', 'day', 'availability_end', 'user']
+        fields = ['start', 'day', 'end', 'user']
