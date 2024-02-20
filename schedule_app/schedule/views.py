@@ -186,9 +186,12 @@ class TimetableView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        today = datetime.now()
+        week_offset = int(self.request.GET.get('week_offset', 0))
+        today = datetime.now() + timedelta(weeks=week_offset)
         week_dates = get_week_dates(today)
         context['week_dates'] = {date: [] for date in week_dates}
+        context['prev_week_url'] = prev_week(today, week_offset)
+        context['next_week_url'] = next_week(today, week_offset)
         
         week_dates_timetable = get_week_dates(today)
         context['week_dates_timetable'] = {date: [] for date in week_dates_timetable}
@@ -219,4 +222,14 @@ class TimetableView(LoginRequiredMixin, ListView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
+def get_week_offset(req_week):
+    if req_week:
+        return int(req_week)
+    return 0
+
+def prev_week(d, week_offset):
+    return 'week_offset=' + str(week_offset - 1)
+
+def next_week(d, week_offset):
+    return 'week_offset=' + str(week_offset + 1)
 
