@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from base.models import Profile, User, Company, InvitationCode, Event, Availability, Timetable
+from base.models import Profile, User, Company, InvitationCode, Event, Availability, Timetable, TimetableSettings
 from django.utils.functional import cached_property
 
 
@@ -81,3 +81,10 @@ class TimetableForm(forms.ModelForm):
             'end': forms.TimeInput(attrs={'type': 'time'}, format='%H:%M'),
         }
         fields = ['user', 'day', 'start', 'end']
+
+
+class TimetableSettingsForm(forms.ModelForm):
+    class Meta:
+        model = TimetableSettings
+        fields = ['people', 'start_time', 'end_date', 'work_days', 'justice', 'min_length']
+

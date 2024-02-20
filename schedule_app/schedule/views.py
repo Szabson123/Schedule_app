@@ -1,18 +1,20 @@
 from typing import Any
+from django.db import transaction
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponseRedirect
 from django.http.response import HttpResponse as HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import (ListView, CreateView,
-                                  UpdateView, DetailView, DeleteView)
+                                  UpdateView, DetailView,
+                                  DeleteView, View)
 from django.utils.safestring import mark_safe
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from base.forms import CreateEventForm, CreateAvailabilityForm, TimetableForm
-from base.models import Event, InvitationCode, Profile, Company, Availability, Timetable
+from base.forms import CreateEventForm, CreateAvailabilityForm, TimetableForm, TimetableSettingsForm
+from base.models import Event, InvitationCode, Profile, Company, Availability, Timetable, TimetableSettings
 from schedule.utils import UserCalendar, get_week_dates
 from base.decorators import check_user_able_to_see_page
 
@@ -233,3 +235,28 @@ def prev_week(d, week_offset):
 def next_week(d, week_offset):
     return 'week_offset=' + str(week_offset + 1)
 
+
+class TimetableSettingsView(LoginRequiredMixin, View):
+    
+    def get(self, request, *args, **kwargs):
+        
+        timetable_settings = TimetableSettings.objects.first()
+        available_workers = Availability.objects.filter(upload=True)
+        
+        self.generate_timetable(timetable_settings, available_workers)
+        
+        return redirect('schedule:timetable')
+        
+    def generate_timetable(self, timetable_settings, available_workers):
+        with transaction.atomic():
+            
+            work_days = timetable_settings.work_days
+            for day in work_days:
+                people = available_workers.filter(available_day__week_day=day['week_day'])
+                for person in people:
+                    Timetable.objects.create(
+                        day=person.availability_day,
+                        start=person.availability_start, 
+                        end=person.availability_end,
+                        user=person.user
+                    )
