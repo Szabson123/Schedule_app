@@ -22,5 +22,5 @@ urlpatterns = [
     
     path('timetable/', TimetableView.as_view(), name='timetable'),
     
-    path('generate/', TimetableSettingsView.as_view(), 'generate')
+    path('generate/', TimetableSettingsView.as_view(), name='generate')
 ]

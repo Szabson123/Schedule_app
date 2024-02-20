@@ -1,3 +1,4 @@
+import json
 from typing import Any
 from django.db import transaction
 from django.db.models.query import QuerySet
@@ -238,21 +239,24 @@ def next_week(d, week_offset):
 
 class TimetableSettingsView(LoginRequiredMixin, View):
     
+
     def get(self, request, *args, **kwargs):
-        
         timetable_settings = TimetableSettings.objects.first()
         available_workers = Availability.objects.filter(upload=True)
-        
+        work_days = json.loads(timetable_settings.work_days) if isinstance(timetable_settings.work_days, str) else timetable_settings.work_days
+        print(work_days)
         self.generate_timetable(timetable_settings, available_workers)
-        
+
         return redirect('schedule:timetable')
-        
+
     def generate_timetable(self, timetable_settings, available_workers):
         with transaction.atomic():
-            
-            work_days = timetable_settings.work_days
-            for day in work_days:
-                people = available_workers.filter(available_day__week_day=day['week_day'])
+            work_days = json.loads(timetable_settings.work_days) if isinstance(timetable_settings.work_days, str) else timetable_settings.work_days
+
+            for day_name in work_days: 
+                day_index = self.get_weekday_index(day_name)  
+                people = available_workers.filter(availability_day__week_day=day_index)
+                
                 for person in people:
                     Timetable.objects.create(
                         day=person.availability_day,
@@ -260,3 +264,8 @@ class TimetableSettingsView(LoginRequiredMixin, View):
                         end=person.availability_end,
                         user=person.user
                     )
+
+
+    def get_weekday_index(self, weekday_name):
+        weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        return weekdays.index(weekday_name) + 1

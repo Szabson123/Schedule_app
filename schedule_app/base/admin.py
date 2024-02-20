@@ -7,5 +7,6 @@ admin.site.register(models.InvitationCode)
 admin.site.register(models.Event)
 admin.site.register(models.Timetable)
 admin.site.register(models.Availability)
+admin.site.register(models.TimetableSettings)
 
 # Register your models here.
