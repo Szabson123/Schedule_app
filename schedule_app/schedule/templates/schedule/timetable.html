@@ -3,9 +3,10 @@
 {% block content %}
 </br>
 <center><h1>Dostępność twoich pracowników</h1></center>
-<a href="?{{ prev_week_url }}">Poprzedni tydzień</a>
-<a href="?{{ next_week_url }}">Następny tydzień</a>
-
+<div>
+    <a class="btn btn-outline-primary left" href="?{{ prev_week_url }}">Poprzedni tydzień</a>
+    <a class="btn btn-outline-primary right" href="?{{ next_week_url }}">Następny tydzień</a>
+</div>
 <hr>
 <div class="week-calendar" style="display: flex; justify-content: space-around;">
 

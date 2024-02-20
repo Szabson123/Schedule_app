@@ -69,3 +69,12 @@ class Availability(models.Model):
     
     def __str__(self):
         return str(self.availability_day)
+    
+    
+class TimetableSettings(models.Model):
+    people = models.IntegerField(default=1)
+    start_time = models.TimeField()
+    end_date = models.TimeField()
+    work_days = models.JSONField(default=list)
+    justice = models.BooleanField(default=True)
+    min_length = models.IntegerField(default=4)
