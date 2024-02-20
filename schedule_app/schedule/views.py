@@ -105,7 +105,6 @@ class WorkersView(ListView, LoginRequiredMixin):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
     
-    
     def get_queryset(self):
         company = get_object_or_404(Company, owner=self.request.user)
         return InvitationCode.objects.filter(company=company).select_related('user')
@@ -146,7 +145,6 @@ class AvaibilityView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Availability.objects.filter(user=self.request.user, upload=False)
 
-    
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
@@ -271,4 +269,14 @@ class TimetableSettingsView(LoginRequiredMixin, View):
     
 
 class CreateSettingsView(LoginRequiredMixin, CreateView):
-    
+    template_name = 'schedule/create_settings.html'
+    form_class = TimetableSettingsForm
+    model = TimetableSettings
+
+    def get_success_url(self):
+        return redirect('schedule:timetable')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+

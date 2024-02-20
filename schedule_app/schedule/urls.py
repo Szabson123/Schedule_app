@@ -3,7 +3,8 @@ from schedule.views import (main_page, CalendarView,
                             CreateEventView, UpdateEventView,
                             WorkersView, DeleteWorkersView,
                             AvaibilityView, CreateAvaibilityView,
-                            TimetableView, TimetableSettingsView)
+                            TimetableView, TimetableSettingsView,
+                            CreateSettingsView,)
 
 
 app_name = 'schedule'
@@ -17,10 +18,11 @@ urlpatterns = [
     path('workers_list/', WorkersView.as_view(), name='workers_view'),
     path('worker_delete/<int:pk>/', DeleteWorkersView.as_view(), name='worker_delete'),
     
-    path('avaibility/', AvaibilityView.as_view(), name='avaibility'),
-    path('create_avaibility/', CreateAvaibilityView.as_view(), name='create_avaibility'),
+    path('availability/', AvaibilityView.as_view(), name='avaibility'),
+    path('create_availability/', CreateAvaibilityView.as_view(), name='create_avaibility'),
     
     path('timetable/', TimetableView.as_view(), name='timetable'),
     
-    path('generate/', TimetableSettingsView.as_view(), name='generate')
+    path('generate/', TimetableSettingsView.as_view(), name='generate'),
+    path('create_settings/', CreateSettingsView.as_view(), name='create_settings')
 ]
