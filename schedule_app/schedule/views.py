@@ -265,7 +265,6 @@ class TimetableSettingsView(LoginRequiredMixin, View):
                         user=person.user
                     )
 
-
     def get_weekday_index(self, weekday_name):
         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         return weekdays.index(weekday_name) + 1
