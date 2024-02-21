@@ -282,7 +282,6 @@ class TimetableSettingsView(LoginRequiredMixin, View):
 
                     current_time = datetime.combine(availability_day, start_time)
                     end_datetime = datetime.combine(availability_day, end_time)
-
                     while current_time < end_datetime:
                         hour = current_time.time()
                         if sum(coverage_map[availability_day][hour].values()) < timetable_settings.people:
@@ -291,10 +290,8 @@ class TimetableSettingsView(LoginRequiredMixin, View):
                                 day=shift['availability_day'],
                                 defaults={'start': start_time, 'end': end_time}
                             )
-                            coverage_map[availability_day][hour][shift['user']] = 1  # Oznacza przypisanie pracownika do tej godziny
-                            break  # Przerwij, aby nie przypisywać ponownie w tej samej godzinie
-                        current_time += timedelta(hours=1)
-
+                            coverage_map[availability_day][hour]['count'] += 1
+                            break
 
     def get_weekday_index(self, weekday_name):
         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
