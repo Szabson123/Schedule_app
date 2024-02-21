@@ -74,7 +74,7 @@ class Availability(models.Model):
 class TimetableSettings(models.Model):
     people = models.IntegerField(default=2)
     start_time = models.TimeField()
-    end_date = models.TimeField()
+    end_time = models.TimeField()
     work_days = models.JSONField(default=list)
     justice = models.BooleanField(default=True)
     min_length = models.IntegerField(default=4)

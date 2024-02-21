@@ -277,24 +277,24 @@ class TimetableSettingsView(LoginRequiredMixin, View):
 
                 for shift in all_shifts_for_day: 
                     start_time = max(shift['start'], timetable_settings.start_time)
-                    end_date = min(shift['end'], timetable_settings.end_date)
+                    end_time = min(shift['end'], timetable_settings.end_time)
                     availability_day = shift['availability_day']
 
                     current_time = datetime.combine(availability_day, start_time)
-                    end_datetime = datetime.combine(availability_day, end_date)
+                    end_datetime = datetime.combine(availability_day, end_time)
 
                     while current_time < end_datetime:
                         hour = current_time.time()
                         if sum(coverage_map[availability_day][hour].values()) < timetable_settings.people:
-                            if coverage_map[availability_day][hour][shift['user']] == 0:  
-
-                                Timetable.objects.update_or_create(
-                                    user_id=shift['user'],
-                                    day=shift['availability_day'],
-                                    defaults={'start': start_time, 'end': end_date}
-                                )
-                                coverage_map[availability_day][hour][shift['user']] += 1
+                            Timetable.objects.update_or_create(
+                                user_id=shift['user'],
+                                day=shift['availability_day'],
+                                defaults={'start': start_time, 'end': end_time}
+                            )
+                            coverage_map[availability_day][hour][shift['user']] = 1  # Oznacza przypisanie pracownika do tej godziny
+                            break  # Przerwij, aby nie przypisywać ponownie w tej samej godzinie
                         current_time += timedelta(hours=1)
+
 
     def get_weekday_index(self, weekday_name):
         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']

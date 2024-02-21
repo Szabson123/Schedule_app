@@ -86,5 +86,5 @@ class TimetableForm(forms.ModelForm):
 class TimetableSettingsForm(forms.ModelForm):
     class Meta:
         model = TimetableSettings
-        fields = ['people', 'start_time', 'end_date', 'work_days', 'justice', 'min_length']
+        fields = ['people', 'start_time', 'end_time', 'work_days', 'justice', 'min_length']
 
