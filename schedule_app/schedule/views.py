@@ -237,7 +237,6 @@ def next_week(d, week_offset):
 
 class TimetableSettingsView(LoginRequiredMixin, View):
     
-
     def get(self, request, *args, **kwargs):
         timetable_settings = TimetableSettings.objects.first()
         available_workers = Availability.objects.filter(upload=True)
@@ -256,12 +255,16 @@ class TimetableSettingsView(LoginRequiredMixin, View):
                 people = available_workers.filter(availability_day__week_day=day_index)
                 
                 for person in people:
-                    Timetable.objects.create(
-                        day=person.availability_day,
-                        start=person.availability_start, 
-                        end=person.availability_end,
-                        user=person.user
-                    )
+                    shift_start = max(person.availability_start, timetable_settings.start_time)
+                    shift_end = min(person.availability_end, timetable_settings.end_date)
+                    shift_length_minutes = (datetime.combine(date.min, shift_end) - datetime.combine(date.min, shift_start)).total_seconds() / 60
+                    if shift_length_minutes >= timetable_settings.min_length:
+                        Timetable.objects.create(
+                            day=person.availability_day,
+                            start=shift_start, 
+                            end=shift_end,
+                            user=person.user
+                        )
 
     def get_weekday_index(self, weekday_name):
         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
