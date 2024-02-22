@@ -259,39 +259,30 @@ class TimetableSettingsView(LoginRequiredMixin, View):
     def generate_timetable(self, timetable_settings, available_workers):
         with transaction.atomic():
             work_days = json.loads(timetable_settings.work_days) if isinstance(timetable_settings.work_days, str) else timetable_settings.work_days
-            coverage_map = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))  # {day: {hour: {user: count}}}
 
             for day_name in work_days:
                 day_index = self.get_weekday_index(day_name)
-                all_shifts_for_day = []
-
                 for person in available_workers:
                     shifts_for_person = Availability.objects.filter(user=person, availability_day__week_day=day_index)
-                    for shift in shifts_for_person:
-                        all_shifts_for_day.append({
-                            'start': shift.availability_start,
-                            'end': shift.availability_end,
-                            'availability_day': shift.availability_day,
-                            'user': person.id  
-                        })
 
-                for shift in all_shifts_for_day: 
-                    start_time = max(shift['start'], timetable_settings.start_time)
-                    end_time = min(shift['end'], timetable_settings.end_time)
-                    availability_day = shift['availability_day']
+                    shifts_to_merge = [
+                        {'start': shift.availability_start, 'end': shift.availability_end, 'availability_day': shift.availability_day}
+                        for shift in shifts_for_person
+                    ]
+                    
+                    merged_shifts = merge_shifts(shifts_to_merge)
 
-                    current_time = datetime.combine(availability_day, start_time)
-                    end_datetime = datetime.combine(availability_day, end_time)
-                    while current_time < end_datetime:
-                        hour = current_time.time()
-                        if sum(coverage_map[availability_day][hour].values()) < timetable_settings.people:
+                    for shift in merged_shifts:
+                        shift_start = max(shift['start'], timetable_settings.start_time)
+                        shift_end = min(shift['end'], timetable_settings.end_time)
+                        shift_length_minutes = (datetime.combine(date.min, shift_end) - datetime.combine(date.min, shift_start)).total_seconds() / 60
+
+                        if shift_length_minutes >= timetable_settings.min_length:
                             Timetable.objects.update_or_create(
-                                user_id=shift['user'],
+                                user=person,
                                 day=shift['availability_day'],
-                                defaults={'start': start_time, 'end': end_time}
+                                defaults={'start': shift_start, 'end': shift_end}
                             )
-                            coverage_map[availability_day][hour]['count'] += 1
-                            break
 
     def get_weekday_index(self, weekday_name):
         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
